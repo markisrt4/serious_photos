@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Serious Photos</title>
+
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="wrap">
+    <h1>Serious Photos</h1>
+    <p class="sub">A tiny private-ish gallery (noindex).</p>
+  </header>
+
+  <main class="wrap" id="gallery" aria-live="polite"></main>
+
+  <script>
+    async function loadGallery() {
+      const res = await fetch('gallery.json', { cache: 'no-store' });
+      const items = await res.json();
+      const root = document.getElementById('gallery');
+
+      for (const item of items) {
+        const figure = document.createElement('figure');
+        figure.className = 'card';
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.caption || 'Photo';
+        img.loading = 'lazy';
+
+        const cap = document.createElement('figcaption');
+        cap.textContent = item.caption || '';
+
+        figure.appendChild(img);
+        figure.appendChild(cap);
+        root.appendChild(figure);
+      }
+    }
+    loadGallery().catch(err => {
+      console.error(err);
+      document.getElementById('gallery').innerHTML =
+        '<p class="error">Could not load gallery.json</p>';
+    });
+  </script>
+</body>
+</html>
