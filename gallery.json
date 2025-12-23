@@ -1,4 +1,5 @@
-[
-  { "src": "photos/3d860934-29a8-457c-a9ed-ba78ee5382a5.png", "caption": "Caption for photo 001" },
-  { "src": "photos/002.jpg", "caption": "Caption for photo 002" }
-]
+{
+  "items": [
+    { "src": "photos/3d860934-29a8-457c-a9ed-ba78ee5382a5.png", "caption": "Let's see how much the humans enjoy this" }
+  ]
+}
