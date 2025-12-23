@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: YOUR_GH_USER/YOUR_REPO
+  repo: markisrt4/serious_photos
   branch: main
   base_url: https://auth.photos.mrtechforge.com
   auth_endpoint: /auth
