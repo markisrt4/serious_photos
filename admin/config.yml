@@ -1,0 +1,30 @@
+backend:
+  name: github
+  repo: YOUR_GH_USER/YOUR_REPO
+  branch: main
+  base_url: https://auth.photos.mrtechforge.com
+  auth_endpoint: /auth
+
+media_folder: "photos"      # where uploads go in the repo
+public_folder: "/photos"    # how the site references them
+
+publish_mode: simple
+site_url: https://photos.mrtechforge.com
+display_url: https://photos.mrtechforge.com
+
+collections:
+  - name: "gallery"
+    label: "Gallery"
+    files:
+      - name: "gallery_json"
+        label: "Gallery Items"
+        file: "gallery.json"
+        format: "json"
+        fields:
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.caption}}"
+            fields:
+              - { label: "Image", name: "src", widget: "image" }
+              - { label: "Caption", name: "caption", widget: "string" }
