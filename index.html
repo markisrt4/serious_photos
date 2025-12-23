@@ -20,8 +20,10 @@
   <script>
     async function loadGallery() {
       const res = await fetch('gallery.json', { cache: 'no-store' });
-      const items = await res.json();
       const root = document.getElementById('gallery');
+      const data = await res.json();
+      const items = data.items || [];
+
 
       for (const item of items) {
         const figure = document.createElement('figure');
