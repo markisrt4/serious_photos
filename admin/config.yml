@@ -5,12 +5,18 @@ backend:
   base_url: https://photos.mrtechforge.com
   auth_endpoint: /auth
 
-media_folder: "photos"      # where uploads go in the repo
-public_folder: "/photos"    # how the site references them
+media_folder: "photos"
+public_folder: "/photos"
 
 publish_mode: simple
+editorial_workflow: false
+
 site_url: https://photos.mrtechforge.com
 display_url: https://photos.mrtechforge.com
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
 
 collections:
   - name: "gallery"
@@ -26,5 +32,9 @@ collections:
             widget: "list"
             summary: "{{fields.caption}}"
             fields:
-              - { label: "Image", name: "src", widget: "image" }
-              - { label: "Caption", name: "caption", widget: "string" }
+              - label: "Image"
+                name: "src"
+                widget: "image"
+              - label: "Caption"
+                name: "caption"
+                widget: "string"
