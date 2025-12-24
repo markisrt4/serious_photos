@@ -2,7 +2,7 @@ backend:
   name: github
   repo: markisrt4/serious_photos
   branch: main
-  base_url: https://auth.photos.mrtechforge.com
+  base_url: https://photos.mrtechforge.com
   auth_endpoint: /auth
 
 media_folder: "photos"      # where uploads go in the repo
