@@ -1,3 +1,5 @@
+html { outline: 10px solid red !important; }
+
 :root{
   --bg0:#050507;
   --bg1:#000000;
