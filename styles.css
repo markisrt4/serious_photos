@@ -78,3 +78,80 @@ h1{
 .error{
   color: #ffd2d2;
 }
+
+/* -----------------------------
+   Filters
+------------------------------ */
+.filters{
+  margin: 12px 0 6px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+}
+
+.filters-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.filters-title{
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--text);
+}
+
+.filters-clear{
+  appearance: none;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  padding: 7px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.filters-clear:hover{
+  box-shadow: 0 0 0 3px rgba(70,160,255,0.12);
+  border-color: rgba(70,160,255,0.35);
+}
+
+.filter-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+}
+
+.chip{
+  appearance: none;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  padding: 7px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.chip[aria-pressed="true"]{
+  border-color: rgba(70,160,255,0.55);
+  background: rgba(70,160,255,0.14);
+  box-shadow: 0 0 18px rgba(70,160,255,0.18);
+}
+
+.filters-note{
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Optional: small category line inside captions */
+.card-meta{
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 6px;
+  text-shadow: none;
+}
+
