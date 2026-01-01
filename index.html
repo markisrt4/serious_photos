@@ -7,27 +7,96 @@
 
   <meta name="robots" content="noindex, nofollow, noarchive" />
 
-  <link rel="stylesheet" href="/styles.css?v=2" />
+  <link rel="stylesheet" href="/styles.css?v=3" />
 </head>
 <body>
   <header class="wrap">
     <h1>Serious Photos</h1>
-    <p class="sub">Mark's Digital Comics.  Based off mostly true stories.</p>
+    <p class="sub">Mark's Digital Comics. Based off mostly true stories.</p>
+
+    <!-- NEW: Filter Bar -->
+    <div class="filters" aria-label="Filter photos by category">
+      <div class="filters-head">
+        <div class="filters-title">Filter</div>
+        <button id="clearFilters" class="filters-clear" type="button">Clear</button>
+      </div>
+      <div id="filterChips" class="filter-chips" role="group" aria-label="Categories"></div>
+    </div>
   </header>
 
   <main class="wrap" id="gallery" aria-live="polite"></main>
 
   <script>
+    function normCat(s) {
+      return String(s || '').trim();
+    }
+
+    function matchesCategories(itemCats, selected) {
+      if (selected.size === 0) return true;           // nothing selected => show all
+      if (!itemCats || itemCats.length === 0) return false;
+      return itemCats.some(c => selected.has(c));     // OR match
+    }
+
     async function loadGallery() {
       const res = await fetch('gallery.json', { cache: 'no-store' });
       const root = document.getElementById('gallery');
+      const chipsRoot = document.getElementById('filterChips');
+      const clearBtn = document.getElementById('clearFilters');
+
       const data = await res.json();
       const items = data.items || [];
 
+      // Collect unique categories
+      const allCats = new Set();
+      for (const item of items) {
+        const cats = Array.isArray(item.categories) ? item.categories : [];
+        for (const c of cats.map(normCat).filter(Boolean)) allCats.add(c);
+      }
 
+      // Sort categories (nice UX)
+      const categories = Array.from(allCats).sort((a, b) => a.localeCompare(b));
+
+      // State
+      const selected = new Set();
+      const figures = [];
+
+      // Build filter chips
+      function renderChips() {
+        chipsRoot.innerHTML = '';
+        for (const cat of categories) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chip';
+          btn.textContent = cat;
+          btn.setAttribute('aria-pressed', selected.has(cat) ? 'true' : 'false');
+
+          btn.addEventListener('click', () => {
+            if (selected.has(cat)) selected.delete(cat);
+            else selected.add(cat);
+            renderChips();
+            applyFilter();
+          });
+
+          chipsRoot.appendChild(btn);
+        }
+
+        // If you have no categories yet
+        if (categories.length === 0) {
+          const note = document.createElement('div');
+          note.className = 'filters-note';
+          note.textContent = 'Add "categories" in gallery.json to enable filtering.';
+          chipsRoot.appendChild(note);
+        }
+      }
+
+      // Build gallery cards
+      root.innerHTML = '';
       for (const item of items) {
         const figure = document.createElement('figure');
         figure.className = 'card';
+
+        const cats = Array.isArray(item.categories) ? item.categories.map(normCat).filter(Boolean) : [];
+        figure.dataset.categories = cats.join('|'); // for debugging / quick checks
 
         const img = document.createElement('img');
         img.src = item.src;
@@ -37,11 +106,42 @@
         const cap = document.createElement('figcaption');
         cap.textContent = item.caption || '';
 
+        // Optional: show categories on the card (remove if you don’t want it)
+        if (cats.length) {
+          const meta = document.createElement('div');
+          meta.className = 'card-meta';
+          meta.textContent = cats.join(' • ');
+          cap.appendChild(document.createElement('br'));
+          cap.appendChild(meta);
+        }
+
         figure.appendChild(img);
         figure.appendChild(cap);
         root.appendChild(figure);
+
+        figures.push({ figure, cats });
       }
+
+      function applyFilter() {
+        let shown = 0;
+        for (const f of figures) {
+          const ok = matchesCategories(f.cats, selected);
+          f.figure.style.display = ok ? '' : 'none';
+          if (ok) shown++;
+        }
+        root.setAttribute('aria-label', `Gallery showing ${shown} photos`);
+      }
+
+      clearBtn.addEventListener('click', () => {
+        selected.clear();
+        renderChips();
+        applyFilter();
+      });
+
+      renderChips();
+      applyFilter();
     }
+
     loadGallery().catch(err => {
       console.error(err);
       document.getElementById('gallery').innerHTML =
